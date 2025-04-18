@@ -8,90 +8,45 @@ const Contact = () => {
     name: '',
     email: '',
     phone: '',
-    message: ''
+    message: '',
+    date: '',
+    time: ''
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [formErrors, setFormErrors] = useState<{[key: string]: string}>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     AOS.refresh();
   }, []);
 
-  const validateForm = () => {
-    const errors: {[key: string]: string} = {};
-    
-    if (!formData.name.trim()) {
-      errors.name = "Name is required";
-    }
-    
-    if (!formData.email.trim()) {
-      errors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = "Email address is invalid";
-    }
-    
-    if (!formData.phone.trim()) {
-      errors.phone = "Phone number is required";
-    } else if (!/^[0-9+\-\s()]{8,20}$/.test(formData.phone)) {
-      errors.phone = "Phone number is invalid";
-    }
-    
-    if (!formData.message.trim()) {
-      errors.message = "Message is required";
-    }
-    
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { id, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [id]: value
-    }));
-    
-    // Clear error for this field when user types
-    if (formErrors[id]) {
-      setFormErrors(prev => ({
-        ...prev,
-        [id]: ''
-      }));
-    }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
-    
-    setIsSubmitting(true);
+    setSubmitting(true);
+    setError('');
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      console.log('Form submitted:', formData);
-      setSubmitSuccess(true);
-      
-      setTimeout(() => {
-        setSubmitSuccess(false);
-        
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          message: ''
-        });
-      }, 3000);
-    } catch (error) {
-      console.error('Error submitting form:', error);
+      // Simulating form submission
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      setSuccess(true);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        message: '',
+        date: '',
+        time: ''
+      });
+    } catch (err) {
+      setError('There was an error submitting your request. Please try again.');
     } finally {
-      setIsSubmitting(false);
+      setSubmitting(false);
     }
   };
 
@@ -103,99 +58,194 @@ const Contact = () => {
         <p className="section-description" data-aos="fade-up" data-aos-delay="200">
           Experience the luxury firsthand. Book your private tour of our exclusive properties.
         </p>
-        {submitSuccess ? (
-          <div className="success-message" data-aos="fade-up">
-            <h3>Thank you for your inquiry!</h3>
-            <p>We will contact you shortly to schedule your viewing experience.</p>
+        
+        <div className="contact-content">
+          <div className="contact-info" data-aos="fade-right" data-aos-delay="300">
+            <div className="info-card">
+              <h3>Contact Information</h3>
+              <div className="info-item">
+                <div className="info-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                </div>
+                <div>
+                  <h4>Visit Us</h4>
+                  <p>123 Luxury Avenue, Paradise City</p>
+                </div>
+              </div>
+              
+              <div className="info-item">
+                <div className="info-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h4>Call Us</h4>
+                  <p>+91 98765 43210</p>
+                </div>
+              </div>
+              
+              <div className="info-item">
+                <div className="info-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                </div>
+                <div>
+                  <h4>Email Us</h4>
+                  <p>info@anokhaestate.com</p>
+                </div>
+              </div>
+              
+              <div className="availability">
+                <h4>Viewing Hours</h4>
+                <p>Monday - Friday: 9AM - 6PM</p>
+                <p>Saturday: 10AM - 4PM</p>
+                <p>Sunday: By Appointment Only</p>
+              </div>
+            </div>
           </div>
-        ) : (
-          <div className="form-container" data-aos="fade-up">
-            <form className="contact-form" onSubmit={handleSubmit}>
-              <div className={`form-group ${formErrors.name ? 'error' : ''}`}>
-                <input
-                  type="text"
-                  id="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-                <label htmlFor="name">Full Name</label>
-                {formErrors.name && <span className="error-text">{formErrors.name}</span>}
+          
+          <div className="contact-form" data-aos="fade-left" data-aos-delay="300">
+            {success ? (
+              <div className="success-message" data-aos="zoom-in">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <h3>Thank You!</h3>
+                <p>Your viewing request has been successfully submitted. Our team will contact you shortly to confirm your appointment.</p>
+                <button onClick={() => setSuccess(false)} className="btn">Schedule Another Viewing</button>
               </div>
-              <div className={`form-group ${formErrors.email ? 'error' : ''}`}>
-                <input
-                  type="email"
-                  id="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-                <label htmlFor="email">Email Address</label>
-                {formErrors.email && <span className="error-text">{formErrors.email}</span>}
-              </div>
-              <div className={`form-group ${formErrors.phone ? 'error' : ''}`}>
-                <input
-                  type="tel"
-                  id="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                />
-                <label htmlFor="phone">Phone Number</label>
-                {formErrors.phone && <span className="error-text">{formErrors.phone}</span>}
-              </div>
-              <div className={`form-group ${formErrors.message ? 'error' : ''}`}>
-                <textarea
-                  id="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                ></textarea>
-                <label htmlFor="message">Message</label>
-                {formErrors.message && <span className="error-text">{formErrors.message}</span>}
-              </div>
-              <button 
-                type="submit" 
-                className="cta-button" 
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Submitting...' : 'Submit Inquiry'}
-              </button>
-            </form>
+            ) : (
+              <form onSubmit={handleSubmit}>
+                <div className="form-header">
+                  <h3>Book Your Private Tour</h3>
+                  <p>Please fill out the form below and we'll get back to you shortly.</p>
+                </div>
+                
+                <div className="form-group" data-aos="fade-up" data-aos-delay="400">
+                  <label htmlFor="name">Full Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="John Doe"
+                    required
+                  />
+                </div>
+                
+                <div className="form-row">
+                  <div className="form-group" data-aos="fade-up" data-aos-delay="450">
+                    <label htmlFor="email">Email Address</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="john@example.com"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="form-group" data-aos="fade-up" data-aos-delay="500">
+                    <label htmlFor="phone">Phone Number</label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="+91 98765 43210"
+                      required
+                    />
+                  </div>
+                </div>
+                
+                <div className="form-row">
+                  <div className="form-group" data-aos="fade-up" data-aos-delay="550">
+                    <label htmlFor="date">Preferred Date</label>
+                    <input
+                      type="date"
+                      id="date"
+                      name="date"
+                      value={formData.date}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="form-group" data-aos="fade-up" data-aos-delay="600">
+                    <label htmlFor="time">Preferred Time</label>
+                    <select
+                      id="time"
+                      name="time"
+                      value={formData.time}
+                      onChange={handleChange}
+                      required
+                    >
+                      <option value="">Select a time</option>
+                      <option value="10:00 AM">10:00 AM</option>
+                      <option value="11:00 AM">11:00 AM</option>
+                      <option value="12:00 PM">12:00 PM</option>
+                      <option value="1:00 PM">1:00 PM</option>
+                      <option value="2:00 PM">2:00 PM</option>
+                      <option value="3:00 PM">3:00 PM</option>
+                      <option value="4:00 PM">4:00 PM</option>
+                      <option value="5:00 PM">5:00 PM</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div className="form-group" data-aos="fade-up" data-aos-delay="650">
+                  <label htmlFor="message">Special Requests (Optional)</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Any specific requests or questions..."
+                    rows={4}
+                  ></textarea>
+                </div>
+                
+                {error && <div className="error-message">{error}</div>}
+                
+                <button type="submit" className="submit-btn" data-aos="fade-up" data-aos-delay="700" disabled={submitting}>
+                  {submitting ? (
+                    <span className="loading">
+                      <span className="loading-circle"></span>
+                      <span className="loading-text">Submitting...</span>
+                    </span>
+                  ) : (
+                    'Schedule Viewing'
+                  )}
+                </button>
+              </form>
+            )}
           </div>
-        )}
+        </div>
       </div>
       
       <style jsx>{`
         .contact {
           padding: 120px 0;
-          background-image: url('/VILLA 4 FINAL OUTPUT/VILLA 4-45.jpg');
-          background-size: cover;
-          background-position: center;
-          background-attachment: fixed;
+          background-color: var(--white);
           position: relative;
-        }
-        
-        .contact::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.7);
-          z-index: 1;
-        }
-        
-        .container {
-          position: relative;
-          z-index: 2;
+          overflow: hidden;
         }
         
         .section-title {
           font-size: 3rem;
           text-align: center;
-          color: var(--white);
+          color: var(--primary-color);
           margin-bottom: 15px;
           font-weight: 700;
           letter-spacing: -0.5px;
@@ -215,101 +265,280 @@ const Contact = () => {
           max-width: 700px;
           margin: 0 auto 50px;
           font-size: 1.2rem;
-          color: var(--white);
+          color: var(--text-color);
           line-height: 1.6;
         }
-
-        .form-container {
-          max-width: 550px;
-          margin: 0 auto;
-          background: rgba(255, 255, 255, 0.95);
-          border-radius: 15px;
-          padding: 35px;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        
+        .contact-content {
+          display: grid;
+          grid-template-columns: 1fr 1.5fr;
+          gap: 40px;
+          align-items: start;
+        }
+        
+        .contact-info {
+          position: relative;
+        }
+        
+        .info-card {
+          background: linear-gradient(145deg, var(--primary-color), var(--secondary-color));
+          color: var(--white);
+          padding: 40px;
+          border-radius: 12px;
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+          height: 100%;
+        }
+        
+        .info-card h3 {
+          font-size: 1.8rem;
+          margin-bottom: 30px;
+          font-weight: 700;
+          position: relative;
+          padding-bottom: 15px;
+        }
+        
+        .info-card h3:after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 60px;
+          height: 3px;
+          background-color: var(--accent-color);
+        }
+        
+        .info-item {
+          display: flex;
+          align-items: center;
+          margin-bottom: 25px;
+          gap: 15px;
+        }
+        
+        .info-icon {
+          width: 40px;
+          height: 40px;
+          background-color: rgba(255, 255, 255, 0.15);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        
+        .info-icon svg {
+          width: 20px;
+          height: 20px;
+          color: var(--white);
+        }
+        
+        .info-item h4 {
+          margin: 0 0 5px 0;
+          font-size: 1.1rem;
+          font-weight: 600;
+        }
+        
+        .info-item p {
+          margin: 0;
+          font-size: 0.95rem;
+          opacity: 0.85;
+        }
+        
+        .availability {
+          margin-top: 30px;
+          padding-top: 20px;
+          border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .availability h4 {
+          margin: 0 0 15px 0;
+          font-size: 1.2rem;
+          font-weight: 600;
+        }
+        
+        .availability p {
+          margin: 5px 0;
+          font-size: 0.95rem;
+          opacity: 0.85;
         }
         
         .contact-form {
+          background-color: var(--white);
+          border-radius: 12px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+          border: 1px solid rgba(235, 235, 235, 0.8);
+          padding: 40px;
+          position: relative;
+        }
+        
+        .form-header {
+          margin-bottom: 30px;
+        }
+        
+        .form-header h3 {
+          font-size: 1.8rem;
+          color: var(--primary-color);
+          margin: 0 0 10px 0;
+          font-weight: 700;
+        }
+        
+        .form-header p {
+          margin: 0;
+          color: var(--text-color);
+          font-size: 1rem;
+        }
+        
+        .form-group {
+          margin-bottom: 20px;
+        }
+        
+        .form-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+        }
+        
+        label {
+          display: block;
+          margin-bottom: 8px;
+          font-size: 0.95rem;
+          font-weight: 500;
+          color: var(--primary-color);
+        }
+        
+        input, select, textarea {
           width: 100%;
+          padding: 12px 16px;
+          border: 1px solid #e1e1e1;
+          border-radius: 8px;
+          background-color: #f9f9f9;
+          font-size: 1rem;
+          color: var(--text-color);
+          transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+          outline: none;
+          border-color: var(--accent-color);
+          box-shadow: 0 0 0 3px rgba(var(--accent-color-rgb), 0.1);
+          background-color: var(--white);
+        }
+        
+        textarea {
+          resize: vertical;
+        }
+        
+        .submit-btn {
+          background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+          color: var(--white);
+          border: none;
+          border-radius: 8px;
+          padding: 14px 24px;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          width: 100%;
+          margin-top: 10px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        
+        .submit-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(var(--primary-color-rgb), 0.2);
+        }
+        
+        .submit-btn:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+          transform: none;
+        }
+        
+        .loading {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        
+        .loading-circle {
+          width: 20px;
+          height: 20px;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-top: 2px solid var(--white);
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+          background-color: rgba(255, 0, 0, 0.1);
+          color: #e53935;
+          padding: 10px 15px;
+          border-radius: 8px;
+          margin-bottom: 20px;
+          font-size: 0.9rem;
         }
         
         .success-message {
-          max-width: 500px;
-          margin: 30px auto 0;
-          padding: 30px;
-          background-color: rgba(46, 204, 113, 0.9);
-          border-radius: 10px;
           text-align: center;
-          color: white;
+          padding: 30px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          gap: 20px;
+        }
+        
+        .success-message svg {
+          width: 60px;
+          height: 60px;
+          color: #4caf50;
+          margin-bottom: 20px;
         }
         
         .success-message h3 {
-          color: white;
-          margin-bottom: 15px;
+          font-size: 2rem;
+          color: var(--primary-color);
+          margin: 0;
         }
         
-        .form-group.error input,
-        .form-group.error textarea {
-          border-bottom: 1px solid #e74c3c;
+        .success-message p {
+          color: var(--text-color);
+          max-width: 500px;
+          margin: 15px 0 25px;
         }
         
-        .error-text {
-          color: #e74c3c;
-          font-size: 0.8rem;
-          margin-top: 5px;
-          display: block;
-        }
-        
-        .cta-button {
-          background: var(--accent-color);
-          width: 100%;
-        }
-
-        .form-group {
-          position: relative;
-          margin-bottom: 25px;
-        }
-        
-        .form-group input, 
-        .form-group textarea {
-          width: 100%;
-          padding: 12px 15px;
-          font-size: 1rem;
+        .btn {
+          background-color: var(--accent-color);
+          color: var(--white);
           border: none;
-          border-radius: 5px;
-          background-color: rgba(255, 255, 255, 0.8);
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-          transition: all 0.3s ease;
-        }
-        
-        .form-group input:focus,
-        .form-group textarea:focus {
-          background-color: #fff;
-          box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .form-group textarea {
-          height: 100px;
-          resize: none;
-        }
-        
-        .form-group label {
-          position: absolute;
-          left: 15px;
-          top: 12px;
+          border-radius: 8px;
+          padding: 12px 24px;
           font-size: 1rem;
-          color: #666;
+          font-weight: 600;
+          cursor: pointer;
           transition: all 0.3s ease;
-          pointer-events: none;
         }
         
-        .form-group input:focus + label,
-        .form-group textarea:focus + label,
-        .form-group input:valid + label,
-        .form-group textarea:valid + label {
-          top: -20px;
-          left: 5px;
-          font-size: 0.85rem;
-          color: var(--accent-color);
+        .btn:hover {
+          background-color: var(--primary-color);
+        }
+        
+        @media (max-width: 992px) {
+          .contact-content {
+            grid-template-columns: 1fr;
+          }
+          
+          .contact-info, .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+          }
         }
         
         @media (max-width: 768px) {
@@ -324,6 +553,15 @@ const Contact = () => {
           .section-description {
             font-size: 1.1rem;
           }
+          
+          .form-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+          }
+          
+          .contact-form, .info-card {
+            padding: 30px;
+          }
         }
         
         @media (max-width: 480px) {
@@ -335,8 +573,8 @@ const Contact = () => {
             font-size: 1rem;
           }
           
-          .form-container {
-            padding: 25px;
+          .form-header h3 {
+            font-size: 1.5rem;
           }
         }
       `}</style>
