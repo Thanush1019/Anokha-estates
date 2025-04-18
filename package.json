@@ -1,0 +1,36 @@
+{
+  "name": "anokha-estates",
+  "version": "1.0.0",
+  "description": "Luxury Villa Website for Anokha Estates",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Thanush1019/Anokha-estates.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Thanush1019/Anokha-estates/issues"
+  },
+  "homepage": "https://github.com/Thanush1019/Anokha-estates#readme",
+  "dependencies": {
+    "@types/aos": "^3.0.7",
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "aos": "^2.3.4",
+    "next": "^14.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sass": "^1.69.5",
+    "typescript": "^5.3.3"
+  }
+}
